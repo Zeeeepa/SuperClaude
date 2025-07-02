@@ -1,38 +1,39 @@
-# SuperClaude – Development Framework for Claude Code
+# SuperClaude – Development Framework for Cursor IDE
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.0.1-blue.svg)](https://github.com/NomenAK/SuperClaude)
-[![GitHub issues](https://img.shields.io/github/issues/NomenAK/SuperClaude)](https://github.com/NomenAK/SuperClaude/issues)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/NomenAK/SuperClaude/blob/master/CONTRIBUTING.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/Zeeeepa/SuperClaude)
+[![GitHub issues](https://img.shields.io/github/issues/Zeeeepa/SuperClaude)](https://github.com/Zeeeepa/SuperClaude/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Zeeeepa/SuperClaude/blob/master/CONTRIBUTING.md)
 
-**A configuration framework that enhances Claude Code with specialized commands, cognitive personas, and development methodologies.**
+**A configuration framework that enhances Cursor IDE with specialized commands, cognitive personas, and development methodologies.**
 
-## 🚀 Version 2.0.1 Update
+## 🚀 Version 3.0.0 - Cursor IDE Adaptation
 
-IMPORTANT: Start Fresh by removing old files and dir in .claude (RULES.md MCP.md PERSONAS.md CLAUDE.md and /commands dir)
+**MAJOR UPDATE**: SuperClaude now works with Cursor IDE instead of Claude Code!
 
-SuperClaude v2 introduces architectural improvements focused on maintainability and extensibility:
+SuperClaude v3 introduces complete Cursor IDE integration:
 
-- **⚡ Streamlined Architecture**: @include reference system for configuration management
-- **🎭 Personas as Flags**: 9 cognitive personas integrated into the flag system (`--persona-architect`, `--persona-security`, etc.)
-- **📦 Enhanced Installer**: install.sh with update mode, dry-run, backup handling, and platform detection
-- **🔧 Modular Design**: Template system for adding new commands and features
-- **🎯 Unified Experience**: Consistent flag behavior across all commands
+- **🎯 Cursor Native**: Built for Cursor's `.cursor/rules` system
+- **🎭 Enhanced Personas**: 9 cognitive personas as individual rule files
+- **📦 Smart Installation**: `install-cursor.sh` with project and global modes
+- **🔧 Rule-Based Architecture**: Leverages Cursor's AI rule system
+- **⚡ Natural Language Commands**: No more slash commands - use natural language
+- **🎯 Context-Aware Activation**: Rules activate based on context and mentions
 
 See [ROADMAP.md](ROADMAP.md) for future development ideas and contribution opportunities.
 
 ## 🎯 Background
 
-Claude Code provides powerful capabilities but can benefit from:
+Cursor IDE provides powerful AI-assisted development but can benefit from:
 - **Specialized expertise** for different technical domains
-- **Token efficiency** for complex projects  
+- **Structured workflows** for complex projects  
 - **Evidence-based approaches** to development
-- **Context preservation** during debugging sessions
+- **Context preservation** during development sessions
 - **Domain-specific thinking** for various tasks
 
 ## ✨ SuperClaude Features
 
-SuperClaude enhances Claude Code with:
+SuperClaude enhances Cursor IDE with:
 - **18 Specialized Commands** covering development lifecycle tasks
 - **9 Cognitive Personas** for domain-specific approaches
 - **Token Optimization** with compression options
@@ -43,75 +44,78 @@ SuperClaude enhances Claude Code with:
 
 ## 🚀 Installation
 
-### Enhanced Installer v2.0.1
-The installer provides various options:
+### Cursor IDE Installation v3.0.0
+The installer provides project and global installation options:
 
 ```bash
-git clone https://github.com/NomenAK/SuperClaude.git
+git clone https://github.com/Zeeeepa/SuperClaude.git
 cd SuperClaude
 
-# Basic installation
-./install.sh                           # Default: ~/.claude/
+# Project installation (recommended)
+./install-cursor.sh                    # Installs to .cursor/rules
+
+# Global installation
+./install-cursor.sh --global          # Available in all projects
 
 # Advanced options
-./install.sh --dir /opt/claude        # Custom location
-./install.sh --update                 # Update existing installation
-./install.sh --dry-run --verbose      # Preview changes with details
-./install.sh --force                  # Skip confirmations (automation)
-./install.sh --log install.log        # Log all operations
+./install-cursor.sh --update          # Update existing installation
+./install-cursor.sh --dry-run --verbose # Preview changes with details
+./install-cursor.sh --force           # Skip confirmations (automation)
+./install-cursor.sh --log install.log # Log all operations
 ```
 
-**v2.0.1 Installer Features:**
+**v3.0.0 Installer Features:**
+- 🎯 **Project Mode**: Install in current project's `.cursor/rules`
+- 🌐 **Global Mode**: Install for all Cursor projects
 - 🔄 **Update Mode**: Preserves customizations while updating
 - 👁️ **Dry Run**: Preview changes before applying
 - 💾 **Smart Backups**: Automatic backup with timestamping
-- 🧹 **Clean Updates**: Removes obsolete files
-- 🖥️ **Platform Detection**: Works with Linux, macOS, WSL
+- 🖥️ **Platform Detection**: Works with Linux, macOS, Windows
 - 📊 **Progress Tracking**: Installation feedback
 
-Zero dependencies. Installs to `~/.claude/` by default.
+Zero dependencies. Installs to `.cursor/rules` by default.
 
-**Note:** After installation, all configuration files are located in `~/.claude/` (your home directory), not in the project directory.
+**Note:** After installation, all rule files are located in `.cursor/rules` and are version-controlled with your project.
 
 ## 💡 Core Capabilities
 
-### 🧠 **Cognitive Personas (Now as Flags!)**
-Switch between different approaches with persona flags:
+### 🧠 **Cognitive Personas (Natural Language Activation!)**
+Switch between different approaches using natural language:
 
-```bash
-/analyze --code --persona-architect     # Systems thinking approach
-/build --react --persona-frontend       # UX-focused development  
-/scan --security --persona-security     # Security-first analysis
-/troubleshoot --prod --persona-analyzer # Root cause analysis approach
+```
+"Use SuperClaude analyze with architect persona to review this system"
+"Apply frontend persona to build this React component"  
+"Take security persona and scan this authentication code"
+"Use analyzer persona to troubleshoot this production issue"
 ```
 
-**v2.0.1 Update**: All 9 personas are now universal flags, available on every command for consistent access to specialized approaches.
+**v3.0.0 Update**: All 9 personas are now individual rule files that activate through natural language mentions, providing specialized approaches contextually.
 
 ### ⚡ **19 Commands**
 Development lifecycle coverage:
 
 **Development Commands**
-```bash
-/build --react --magic --tdd    # Development with AI components
-/dev-setup --ci --monitor       # Environment setup
-/test --coverage --e2e --pup    # Testing strategies
+```
+"Use SuperClaude build to create a React app with TypeScript and testing"
+"Apply SuperClaude dev-setup for CI/CD pipeline configuration"
+"Run SuperClaude test with comprehensive coverage and E2E testing"
 ```
 
 **Analysis & Quality**
-```bash
-/review --quality --evidence --persona-qa     # AI-powered code review
-/analyze --architecture --seq   # System analysis
-/troubleshoot --prod --five-whys # Issue resolution
-/improve --performance --iterate # Optimization
-/explain --depth expert --visual # Documentation
+```
+"Use SuperClaude review with QA persona for code quality analysis"
+"Apply SuperClaude analyze to examine this system architecture"
+"Run SuperClaude troubleshoot to resolve this production issue"
+"Use SuperClaude improve for performance optimization"
+"Apply SuperClaude explain to document this complex feature"
 ```
 
 **Operations & Security**
-```bash
-/deploy --env prod --plan       # Deployment planning
-/scan --security --owasp --deps # Security audits
-/migrate --dry-run --rollback   # Database migrations
-/cleanup --all --validate       # Maintenance tasks
+```
+"Use SuperClaude deploy to plan production deployment strategy"
+"Apply SuperClaude scan with security persona for vulnerability assessment"
+"Run SuperClaude migrate for database schema changes"
+"Use SuperClaude cleanup to optimize project maintenance"
 ```
 
 ### 🎛️ **MCP Integration**
@@ -120,7 +124,7 @@ Development lifecycle coverage:
 - **Magic**: AI-generated UI components
 - **Puppeteer**: Browser testing and automation
 
-**⚠️ Important:** SuperClaude does not include MCP servers. You need to install them separately in Claude Code's MCP settings to use MCP-related flags (--c7, --seq, --magic, --pup).
+**⚠️ Important:** SuperClaude does not include MCP servers. You need to install them separately in Cursor's MCP settings to use MCP-related capabilities when available.
 
 ### 📊 **Token Efficiency**
 SuperClaude's @include template system helps manage token usage:
@@ -132,33 +136,33 @@ SuperClaude's @include template system helps manage token usage:
 ## 🎮 Example Workflows
 
 ### Enterprise Architecture Flow
-```bash
-/design --api --ddd --bounded-context --persona-architect    # Domain-driven design
-/estimate --detailed --worst-case --seq                      # Resource planning
-/scan --security --validate --persona-security               # Security review
-/build --api --tdd --coverage --persona-backend              # Implementation
+```
+"Use SuperClaude design with architect persona for API domain-driven design"
+"Apply SuperClaude estimate for detailed resource planning and worst-case scenarios"
+"Run SuperClaude scan with security persona for comprehensive security review"
+"Use SuperClaude build with backend persona for TDD API implementation"
 ```
 
 ### Production Issue Resolution
-```bash
-/troubleshoot --investigate --prod --persona-analyzer        # Analysis
-/analyze --profile --perf --seq                             # Performance review
-/improve --performance --threshold 95% --persona-performance # Optimization
-/test --integration --e2e --pup                             # Validation
+```
+"Use SuperClaude troubleshoot with analyzer persona to investigate production issues"
+"Apply SuperClaude analyze for performance profiling and bottleneck identification"
+"Run SuperClaude improve with performance persona for 95% optimization target"
+"Use SuperClaude test for integration and end-to-end validation"
 ```
 
 ### Framework Troubleshooting & Improvement
-```bash
-/troubleshoot --introspect                                  # Debug SuperClaude behavior
-/analyze --introspect --seq                                 # Analyze framework patterns
-/improve --introspect --uc                                  # Optimize token usage
+```
+"Use SuperClaude troubleshoot to debug development workflow issues"
+"Apply SuperClaude analyze to examine code patterns and architecture"
+"Run SuperClaude improve to optimize development processes and efficiency"
 ```
 
 ### Full-Stack Feature Development
-```bash
-/build --react --magic --watch --persona-frontend           # UI development
-/test --coverage --e2e --strict --persona-qa                # Quality assurance
-/scan --validate --deps --persona-security                  # Security check
+```
+"Use SuperClaude build with frontend persona for React UI development"
+"Apply SuperClaude test with QA persona for comprehensive quality assurance"
+"Run SuperClaude scan with security persona for dependency and security validation"
 ```
 
 ## 🎭 Available Personas
@@ -264,7 +268,7 @@ SuperClaude v2's architecture enables extensibility:
 - **19 Commands** – Development lifecycle coverage
 - **Flag Inheritance** – Universal flags on all commands
 - **Persona Integration** – 9 cognitive modes as flags
-- **Template Validation** – Reference integrity checking
+- **Template Validation** �� Reference integrity checking
 
 **📦 Architecture Benefits**
 - **Single Source of Truth** – Centralized updates
@@ -330,30 +334,30 @@ SuperClaude v2's architecture enables extensibility:
 
 1. **Install SuperClaude**
    ```bash
-   git clone https://github.com/NomenAK/SuperClaude.git && cd SuperClaude && ./install.sh
+   git clone https://github.com/Zeeeepa/SuperClaude.git && cd SuperClaude && ./install-cursor.sh
    ```
 
 2. **Validate Installation**
-   ```bash
-   /load                                    # Load project context
-   /analyze --code --think                  # Test analysis
-   /analyze --architecture --persona-architect  # Try personas
+   ```
+   "Use SuperClaude load to understand this project context"
+   "Apply SuperClaude analyze to review this codebase"
+   "Take architect persona and analyze this system architecture"
    ```
 
 3. **Example Workflow**
-   ```bash
-   /design --api --ddd            # Architecture design
-   /build --feature --tdd         # Implementation
-   /test --coverage --e2e         # Quality assurance
-   /deploy --env staging --plan   # Deployment
+   ```
+   "Use SuperClaude design for API architecture with domain-driven design"
+   "Apply SuperClaude build to implement this feature with TDD"
+   "Run SuperClaude test with comprehensive coverage and E2E testing"
+   "Use SuperClaude deploy to plan staging environment deployment"
    ```
 
 ## 🛟 Support
 
-- **Installation Help**: Run `./install.sh --help`
-- **Command Details**: Check `~/.claude/commands/`
+- **Installation Help**: Run `./install-cursor.sh --help`
+- **Command Details**: Check `.cursor/rules/commands/`
 - **Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Issues**: [GitHub Issues](https://github.com/NomenAK/SuperClaude/issues)
+- **Issues**: [GitHub Issues](https://github.com/Zeeeepa/SuperClaude/issues)
 
 ## 🤝 Community
 
@@ -363,31 +367,31 @@ SuperClaude welcomes contributions:
 - **Patterns** for development practices
 - **Integrations** for productivity tools
 
-Join the community: [Discussions](https://github.com/NomenAK/SuperClaude/discussions)
+Join the community: [Discussions](https://github.com/Zeeeepa/SuperClaude/discussions)
 
-## 📈 Version 2.0.1 Changes
+## 📈 Version 3.0.0 Changes
 
-**🎯 Architecture Improvements:**
-- **Configuration Management**: @include reference system
-- **Token Efficiency**: Compression options maintained
-- **Command System**: Unified flag inheritance
-- **Persona System**: Now available as flags
-- **Installer**: Enhanced with new modes
-- **Maintenance**: Centralized configuration
+**🎯 Cursor IDE Integration:**
+- **Rule-Based Architecture**: Native `.cursor/rules` system
+- **Natural Language Commands**: No more slash commands
+- **Context-Aware Activation**: Smart rule triggering
+- **Project Integration**: Version-controlled rules
+- **Global Support**: Cross-project availability
+- **Enhanced Installation**: Project and global modes
 
 **📊 Framework Details:**
 - **Commands**: 19 specialized commands
 - **Personas**: 9 cognitive approaches
-- **MCP Servers**: 4 integrations
+- **Rule Files**: Individual activation system
 - **Methodology**: Evidence-based approach
-- **Usage**: By development teams
+- **Usage**: Cursor IDE development teams
 
 ## 🎉 Enhance Your Development
 
-SuperClaude provides a structured approach to using Claude Code with specialized commands, personas, and development patterns.
+SuperClaude provides a structured approach to using Cursor IDE with specialized commands, personas, and development patterns.
 
 ---
 
-*SuperClaude v2.0.1 – Development framework for Claude Code*
+*SuperClaude v3.0.0 – Development framework for Cursor IDE*
 
-[⭐ Star on GitHub](https://github.com/NomenAK/SuperClaude) | [💬 Discussions](https://github.com/NomenAK/SuperClaude/discussions) | [🐛 Report Issues](https://github.com/NomenAK/SuperClaude/issues)
+[⭐ Star on GitHub](https://github.com/Zeeeepa/SuperClaude) | [💬 Discussions](https://github.com/Zeeeepa/SuperClaude/discussions) | [🐛 Report Issues](https://github.com/Zeeeepa/SuperClaude/issues)
