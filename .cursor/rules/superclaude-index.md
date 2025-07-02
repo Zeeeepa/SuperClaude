@@ -1,6 +1,6 @@
 # SuperClaude Command Index for Cursor
 
-SuperClaude provides 19 specialized commands and 9 cognitive personas to enhance your development workflow in Cursor.
+SuperClaude provides 20 specialized commands and 11 cognitive personas to enhance your development workflow in Cursor.
 
 ## Available Commands
 
@@ -15,6 +15,7 @@ SuperClaude provides 19 specialized commands and 9 cognitive personas to enhance
 - **troubleshoot** - Debugging and issue resolution
 - **improve** - Enhancement and optimization
 - **explain** - Documentation and explanations
+- **requirements** - Requirements gathering and analysis with stakeholder management
 
 ### Operations Commands
 - **deploy** - Application deployment planning
@@ -45,6 +46,8 @@ SuperClaude provides 19 specialized commands and 9 cognitive personas to enhance
 - **qa** - Quality assurance and testing
 - **refactorer** - Code quality and improvement
 - **mentor** - Knowledge sharing and documentation
+- **business-analyst** - Requirements engineering and stakeholder management
+- **product-manager** - Product strategy and roadmap planning
 
 ## How to Use SuperClaude in Cursor
 
@@ -53,17 +56,22 @@ Instead of slash commands, use natural language that references the command:
 - "Use SuperClaude build to create a React app with TypeScript"
 - "Apply SuperClaude analyze to review this codebase architecture"
 - "Run SuperClaude test with coverage analysis"
+- "Use SuperClaude requirements to gather stakeholder needs for this feature"
 
 ### Activating Personas
 Reference personas in your requests:
 - "Take the architect persona and design this API"
 - "Use security persona to review this authentication code"
 - "Apply frontend persona to improve this component"
+- "Use business analyst persona to gather comprehensive requirements"
+- "Take product manager persona to develop a feature roadmap"
 
 ### Combining Commands and Personas
 - "Use SuperClaude build with architect persona for a scalable API"
 - "Apply SuperClaude review with security persona for this auth module"
 - "Run SuperClaude troubleshoot with analyzer persona for this bug"
+- "Use SuperClaude requirements with business analyst persona for stakeholder analysis"
+- "Apply SuperClaude analyze with product manager persona for feature prioritization"
 
 ## Activation Patterns
 SuperClaude activates when you:
@@ -80,5 +88,4 @@ SuperClaude activates when you:
 - **MCP Compatibility** - Works with Model Context Protocol servers
 
 ---
-*To get started, try: "Use SuperClaude build to create a new React project with TypeScript"*
-
+*To get started, try: "Use SuperClaude requirements with business analyst persona to gather comprehensive project requirements" or "Use SuperClaude build to create a new React project with TypeScript"*
