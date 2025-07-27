@@ -650,18 +650,29 @@ start_ccr_service() {
     # Wait for service to start
     sleep 5
     
-    # Verify service is running
-    if kill -0 $CCR_PID 2>/dev/null; then
+    # Verify service is running (check both PID and process)
+    if kill -0 $CCR_PID 2>/dev/null || pgrep -f "ccr.*start" > /dev/null; then
         success "Claude Code Router started successfully on port $CCR_PORT"
-        info "Process ID: $CCR_PID"
+        if kill -0 $CCR_PID 2>/dev/null; then
+            info "Process ID: $CCR_PID"
+        else
+            info "Service was already running"
+        fi
         info "Log file: $CCR_CONFIG_DIR/ccr.log"
     else
-        error "Failed to start Claude Code Router"
-        if [[ -f "$CCR_CONFIG_DIR/ccr.log" ]]; then
-            error "Log output:"
-            tail -10 "$CCR_CONFIG_DIR/ccr.log"
+        # Check if the log indicates service was already running
+        if [[ -f "$CCR_CONFIG_DIR/ccr.log" ]] && grep -q "Service is already running" "$CCR_CONFIG_DIR/ccr.log"; then
+            success "Claude Code Router service already running ✓"
+            info "Service running on port $CCR_PORT"
+            info "Log file: $CCR_CONFIG_DIR/ccr.log"
+        else
+            error "Failed to start Claude Code Router"
+            if [[ -f "$CCR_CONFIG_DIR/ccr.log" ]]; then
+                error "Log output:"
+                tail -10 "$CCR_CONFIG_DIR/ccr.log"
+            fi
+            exit 1
         fi
-        exit 1
     fi
 }
 
