@@ -429,8 +429,8 @@ install_global_packages() {
         exit 1
     fi
     
-    if command -v claude-code-router &> /dev/null; then
-        success "Claude Code Router verified ✓"
+    if command -v ccr &> /dev/null; then
+        success "Claude Code Router (ccr) verified ✓"
     else
         error "Claude Code Router installation failed"
         exit 1
@@ -582,14 +582,14 @@ EOF
 # Claude Code Router Aliases and Functions
 
 # Service management
-alias ccr-start='claude-code-router --config "$CCR_CONFIG_DIR/config.json" > "$CCR_CONFIG_DIR/ccr.log" 2>&1 &'
-alias ccr-stop='pkill -f claude-code-router'
+alias ccr-start='ccr start --config "$CCR_CONFIG_DIR/config.json" > "$CCR_CONFIG_DIR/ccr.log" 2>&1 &'
+alias ccr-stop='ccr stop'
 alias ccr-restart='ccr-stop && sleep 2 && ccr-start'
 alias ccr-logs='tail -f "$CCR_CONFIG_DIR/ccr.log"'
 
 # Status check function
 ccr-status() {
-    if pgrep -f claude-code-router > /dev/null; then
+    if pgrep -f ccr > /dev/null; then
         echo "✅ Claude Code Router is running"
         echo "📡 Port: $CCR_PORT"
         echo "🔗 API: http://127.0.0.1:$CCR_PORT"
@@ -617,14 +617,14 @@ EOF
 stop_existing_service() {
     log "Stopping any existing Claude Code Router service..."
     
-    # Kill any existing claude-code-router processes
-    if pgrep -f claude-code-router > /dev/null; then
-        pkill -f claude-code-router
+    # Stop any existing ccr processes
+    if pgrep -f ccr > /dev/null; then
+        ccr stop 2>/dev/null || pkill -f ccr
         sleep 2
         
         # Force kill if still running
-        if pgrep -f claude-code-router > /dev/null; then
-            pkill -9 -f claude-code-router
+        if pgrep -f ccr > /dev/null; then
+            pkill -9 -f ccr
             sleep 1
         fi
     fi
@@ -641,7 +641,7 @@ start_ccr_service() {
     log "Starting Claude Code Router service..."
     
     # Start the service in background
-    nohup claude-code-router --config "$CCR_CONFIG_FILE" > "$CCR_CONFIG_DIR/ccr.log" 2>&1 &
+    nohup ccr start --config "$CCR_CONFIG_FILE" > "$CCR_CONFIG_DIR/ccr.log" 2>&1 &
     CCR_PID=$!
     
     # Save PID
@@ -1169,18 +1169,18 @@ case "$1" in
     start)
         echo "🚀 Starting Claude Enhancement Platform..."
         source ~/.claude-venv/bin/activate
-        claude-code-router --config ~/.claude-code-router/config.json > ~/.claude-code-router/ccr.log 2>&1 &
+        ccr start --config ~/.claude-code-router/config.json > ~/.claude-code-router/ccr.log 2>&1 &
         echo "✅ Platform started"
         ;;
     stop)
         echo "🛑 Stopping Claude Enhancement Platform..."
-        pkill -f claude-code-router
+        ccr stop
         echo "✅ Platform stopped"
         ;;
     status)
         echo "📊 Claude Enhancement Platform Status"
         echo "======================================"
-        if pgrep -f claude-code-router > /dev/null; then
+        if pgrep -f ccr > /dev/null; then
             echo "✅ Router: Running"
         else
             echo "❌ Router: Stopped"
