@@ -453,110 +453,26 @@ generate_config() {
     
     cat > "$CCR_CONFIG_FILE" << EOF
 {
-  "port": $CCR_PORT,
-  "gemini": {
-    "apiKey": "$GEMINI_API_KEY",
-    "models": {
-      "gemini-2.5-flash": {
-        "name": "gemini-2.5-flash",
-        "contextWindow": 1048576,
-        "maxOutputTokens": 8192,
-        "temperature": 0.7,
-        "topP": 0.95,
-        "topK": 40,
-        "safetySettings": [
-          {
-            "category": "HARM_CATEGORY_HARASSMENT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_HATE_SPEECH",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          }
-        ],
-        "generationConfig": {
-          "temperature": 0.7,
-          "topP": 0.95,
-          "topK": 40,
-          "maxOutputTokens": 8192
-        }
-      },
-      "gemini-2.5-pro": {
-        "name": "gemini-2.5-pro",
-        "contextWindow": 2097152,
-        "maxOutputTokens": 8192,
-        "temperature": 0.7,
-        "topP": 0.95,
-        "topK": 40,
-        "safetySettings": [
-          {
-            "category": "HARM_CATEGORY_HARASSMENT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_HATE_SPEECH",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          },
-          {
-            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-            "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-          }
-        ],
-        "generationConfig": {
-          "temperature": 0.7,
-          "topP": 0.95,
-          "topK": 40,
-          "maxOutputTokens": 8192
-        }
-      },
-      "gemini-1.5-pro": {
-        "name": "gemini-1.5-pro",
-        "contextWindow": 2097152,
-        "maxOutputTokens": 8192,
-        "temperature": 0.7,
-        "topP": 0.95,
-        "topK": 40
-      },
-      "gemini-1.5-flash": {
-        "name": "gemini-1.5-flash",
-        "contextWindow": 1048576,
-        "maxOutputTokens": 8192,
-        "temperature": 0.7,
-        "topP": 0.95,
-        "topK": 40
+  "APIKEY": "$GEMINI_API_KEY",
+  "LOG": true,
+  "Providers": [
+    {
+      "name": "gemini",
+      "api_base_url": "https://generativelanguage.googleapis.com/v1beta/models/",
+      "api_key": "$GEMINI_API_KEY",
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-pro", "gemini-1.5-flash"],
+      "transformer": {
+        "use": ["gemini"]
       }
-    },
-    "defaultModel": "gemini-2.5-flash",
-    "modelAliases": {
-      "default": "gemini-2.5-flash",
-      "background": "gemini-2.5-flash",
-      "webSearch": "gemini-2.5-flash",
-      "think": "gemini-2.5-pro",
-      "longContext": "gemini-2.5-pro"
     }
-  },
-  "logging": {
-    "level": "info",
-    "file": "$CCR_CONFIG_DIR/ccr.log"
-  },
-  "cors": {
-    "enabled": true,
-    "origins": ["*"]
-  },
-  "rateLimit": {
-    "enabled": false
+  ],
+  "Router": {
+    "default": "gemini,gemini-2.5-flash",
+    "background": "gemini,gemini-2.5-flash",
+    "think": "gemini,gemini-2.5-pro",
+    "longContext": "gemini,gemini-2.5-pro",
+    "longContextThreshold": 60000,
+    "webSearch": "gemini,gemini-2.5-flash"
   }
 }
 EOF
