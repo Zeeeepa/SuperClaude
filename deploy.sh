@@ -396,9 +396,9 @@ EOF
     success "Configuration file created: $CCR_CONFIG_FILE"
 }
 
-# Set environment variables
+# Set environment variables and configure Claude Code
 setup_environment() {
-    log "Setting up environment variables..."
+    log "Setting up environment variables and Claude Code configuration..."
     
     # Create environment file
     ENV_FILE="$HOME/.claude-code-router.env"
@@ -414,6 +414,46 @@ EOF
     # Source the environment file
     source "$ENV_FILE"
     
+    # Configure Claude Code directly by updating ~/.claude.json
+    CLAUDE_CONFIG="$HOME/.claude.json"
+    if [[ -f "$CLAUDE_CONFIG" ]]; then
+        info "Backing up existing Claude configuration..."
+        cp "$CLAUDE_CONFIG" "$CLAUDE_CONFIG.backup"
+    fi
+    
+    info "Updating Claude Code configuration..."
+    cat > "$CLAUDE_CONFIG" << EOF
+{
+  "apiKey": "$GEMINI_API_KEY",
+  "apiBaseUrl": "http://127.0.0.1:$CCR_PORT",
+  "timeout": 600000
+}
+EOF
+    success "Claude Code configuration updated: $CLAUDE_CONFIG"
+    
+    # Create a wrapper script for Claude Code
+    info "Creating Claude Code wrapper script..."
+    cat > "$HOME/ccr-code" << 'EOF'
+#!/bin/bash
+# Claude Code Router Wrapper
+# Ensures environment variables are set before launching Claude Code
+
+# Source the environment file
+if [[ -f "$HOME/.claude-code-router.env" ]]; then
+    source "$HOME/.claude-code-router.env"
+fi
+
+# Set environment variables explicitly
+export ANTHROPIC_API_KEY="AIzaSyBXmhlHudrD4zXiv-5fjxi1gGG-_kdtaZ0"
+export ANTHROPIC_API_BASE_URL="http://127.0.0.1:3456"
+
+# Launch Claude Code
+exec ccr code "$@"
+EOF
+    
+    chmod +x "$HOME/ccr-code"
+    success "Created Claude Code wrapper: $HOME/ccr-code"
+    
     # Add to shell profile for persistence
     SHELL_PROFILE=""
     if [[ -f "$HOME/.bashrc" ]]; then
@@ -427,13 +467,15 @@ EOF
     if [[ -n "$SHELL_PROFILE" ]]; then
         if ! grep -q "claude-code-router.env" "$SHELL_PROFILE"; then
             echo "" >> "$SHELL_PROFILE"
-            echo "# Claude Code Router Environment" >> "$SHELL_PROFILE"
-            echo "source $ENV_FILE" >> "$SHELL_PROFILE"
+            echo "# Claude Code Router Environment (Auto-added)" >> "$SHELL_PROFILE"
+            echo "if [[ -f \"\$HOME/.claude-code-router.env\" ]]; then" >> "$SHELL_PROFILE"
+            echo "    source \"\$HOME/.claude-code-router.env\"" >> "$SHELL_PROFILE"
+            echo "fi" >> "$SHELL_PROFILE"
             info "Added environment variables to $SHELL_PROFILE"
         fi
     fi
     
-    success "Environment variables configured"
+    success "Environment variables and Claude Code configuration completed"
 }
 
 # Stop existing CCR service
@@ -613,7 +655,8 @@ print_summary() {
     echo "   • 🚀 devops - DevOps and infrastructure"
     
     echo -e "\n${BLUE}🚀 Usage Commands:${NC}"
-    echo "   • ccr code               - Launch Claude Code with Gemini"
+    echo "   • ./ccr-code             - Launch Claude Code with Gemini (RECOMMENDED)"
+    echo "   • ccr code               - Launch Claude Code (after restart)"
     echo "   • ccr status             - Check service status"
     echo "   • ccr stop               - Stop the service"
     echo "   • ccr restart            - Restart the service"
@@ -627,7 +670,7 @@ print_summary() {
     
     echo -e "\n${YELLOW}💡 Next Steps:${NC}"
     echo "   1. Run './test_superclaude.sh' to test the complete system"
-    echo "   2. Use 'ccr code' to launch Claude Code with Gemini API"
+    echo "   2. Use './ccr-code' to launch Claude Code with Gemini API"
     echo "   3. Try 'superclaude analyzer explain' for code analysis"
     echo "   4. Check logs with 'tail -f $CCR_CONFIG_DIR/ccr.log'"
     
@@ -671,4 +714,3 @@ trap cleanup EXIT
 
 # Run main function
 main "$@"
-
