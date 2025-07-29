@@ -22,6 +22,9 @@ CCR_CONFIG_DIR="$HOME/.claude-code-router"
 CCR_CONFIG_FILE="$CCR_CONFIG_DIR/config.json"
 CCR_PORT=3456
 
+# Create fake Anthropic-style API key for Claude Code compatibility
+FAKE_ANTHROPIC_KEY="sk-ant-api03-$(echo "$GEMINI_API_KEY" | cut -c1-20)-$(date +%s)-AA"
+
 # Logging function
 log() {
     echo -e "${GREEN}[$(date +'%Y-%m-%d %H:%M:%S')] $1${NC}"
@@ -367,9 +370,11 @@ setup_config_directory() {
 generate_config() {
     log "Generating Claude Code Router configuration..."
     
+
+    
     cat > "$CCR_CONFIG_FILE" << EOF
 {
-  "APIKEY": "$GEMINI_API_KEY",
+  "APIKEY": "$FAKE_ANTHROPIC_KEY",
   "LOG": true,
   "Providers": [
     {
@@ -389,11 +394,16 @@ generate_config() {
     "longContext": "gemini,gemini-2.5-pro",
     "longContextThreshold": 60000,
     "webSearch": "gemini,gemini-2.5-flash"
-  }
+  },
+  "AuthKeys": [
+    "$GEMINI_API_KEY",
+    "$FAKE_ANTHROPIC_KEY"
+  ]
 }
 EOF
     
     success "Configuration file created: $CCR_CONFIG_FILE"
+    info "Fake Anthropic key created for Claude Code: $FAKE_ANTHROPIC_KEY"
 }
 
 # Set environment variables and configure Claude Code
@@ -424,7 +434,7 @@ EOF
     info "Updating Claude Code configuration..."
     cat > "$CLAUDE_CONFIG" << EOF
 {
-  "apiKey": "$GEMINI_API_KEY",
+  "apiKey": "$FAKE_ANTHROPIC_KEY",
   "apiBaseUrl": "http://127.0.0.1:$CCR_PORT",
   "timeout": 600000
 }
@@ -433,22 +443,22 @@ EOF
     
     # Create a wrapper script for Claude Code
     info "Creating Claude Code wrapper script..."
-    cat > "$HOME/ccr-code" << 'EOF'
+    cat > "$HOME/ccr-code" << EOF
 #!/bin/bash
 # Claude Code Router Wrapper
 # Ensures environment variables are set before launching Claude Code
 
 # Source the environment file
-if [[ -f "$HOME/.claude-code-router.env" ]]; then
-    source "$HOME/.claude-code-router.env"
+if [[ -f "\$HOME/.claude-code-router.env" ]]; then
+    source "\$HOME/.claude-code-router.env"
 fi
 
-# Set environment variables explicitly
-export ANTHROPIC_API_KEY="AIzaSyBXmhlHudrD4zXiv-5fjxi1gGG-_kdtaZ0"
-export ANTHROPIC_API_BASE_URL="http://127.0.0.1:3456"
+# Set environment variables explicitly with fake Anthropic key format
+export ANTHROPIC_API_KEY="$FAKE_ANTHROPIC_KEY"
+export ANTHROPIC_API_BASE_URL="http://127.0.0.1:$CCR_PORT"
 
 # Launch Claude Code
-exec ccr code "$@"
+exec ccr code "\$@"
 EOF
     
     chmod +x "$HOME/ccr-code"
